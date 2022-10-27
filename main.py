@@ -1,10 +1,10 @@
 import configparser
-import platform    # For getting the operating system name
-import subprocess  # For executing a shell command
+import platform 
+import subprocess 
 import sys
 import pathlib
-import time      
-from optparse import OptionParser  
+import time
+from optparse import OptionParser
 
 shouldRun = True
 maxPingAttempts = 3
@@ -94,7 +94,7 @@ while(shouldRun): # <- bad practice
             cmd = 'start /b cmd /c \"' + ovpnBinaryPath + '\" --connect ' + ovpnConfigFile
             # run and remember the process as 'x'
             x = subprocess.Popen(cmd, shell=True)
-            #subprocess.call(["C:\\Program Files\\OpenVPN\\bin\\openvpn-gui.exe", "--connect Hollaender_real"])
+            #subprocess.call(["C:\\Program Files\\OpenVPN\\bin\\openvpn-gui.exe", "--connect testerino"])
             #callReturnValue = subprocess.call(ovpnBinaryPath + " --command connect " + ovpnConfigPath)
         else:
             #TODO: linux && mac process startup

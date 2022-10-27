@@ -6,6 +6,7 @@ If failing to respond after a given number x of pings it attempts to reconnect v
 For more details check the code itself or use the implemted command help via "python main.py -h".
 Please keep in mind: This code was chunked together by a noob python dev in an three hour night shift.. You should see it more like a cheat sheet || inspiration.
 
+![console help output screenshot](https://github.com/0x1911/ovpn_watchdog/blob/main/_img/help_output.png)
 
 ## Requirements:
 * Win OS (only tested on Win OS so far! It'll break when trying to startup the ovpn-gui client on linux/mac <- 27.10.2022)
