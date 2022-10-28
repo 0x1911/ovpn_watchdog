@@ -14,8 +14,9 @@ Please keep in mind: This code was chunked together by a noob python dev in an t
 * OpenVPN config file in ../config/ with added credentials || keys
 
 
-## How To:
-* Clone it, use it
+## Installation:
+* Clone it
+* Use it
 
 
 ## How To:
