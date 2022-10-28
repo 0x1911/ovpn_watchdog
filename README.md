@@ -15,15 +15,21 @@ Please keep in mind: This code was chunked together by a noob python dev in an t
 
 
 ## How To:
+* Clone it, use it
+
+
+## How To:
+```
+python main.py -h
+```
+## Alternative How To:
 * Create a *.bat file
-* pseudo example:
+* pseudo batch code example:
 ```
 python Path\To\File\main.py -t 13.37.0.1 -c SecureMoonVPN
 ```
 * add to Win OS autostart through your method of choice
 * hopefully never end up with a disconnected client over a longer period of time
-* ???
-* Profit!
 
 
 ## ToDo (maybe):
