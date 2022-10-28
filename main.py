@@ -1,7 +1,5 @@
-import configparser
 import platform 
 import subprocess 
-import sys
 import pathlib
 import time
 from optparse import OptionParser
@@ -9,9 +7,12 @@ from optparse import OptionParser
 shouldRun = True
 maxPingAttempts = 3
 failedPingCount = 0
-targetHost = ""
+showDebugOutput = False
+pingTargetHost = ""
 ovpnBinaryPath = ""
 ovpnConfigFile = ""
+
+ovpnPID = 0
 
 #region helper methods
 def isWindowsOS():
@@ -29,7 +30,9 @@ def doSmartPing(host):
     param = '-n' if isWindowsOS() else '-c'
     command = ['ping', param, '1', host]
 
-    # TODO: stdout and stderr are routed to devnull to shup up the console chatter.. maybe re-setup chatter as debug option?
+    if(showDebugOutput):
+        return subprocess.call(command) == 0
+
     return subprocess.call(command, stdout=open(platform.os.devnull, 'wb')) == 0
 
 def pingHasFailed(isFail = False):
@@ -50,17 +53,17 @@ parser.add_option("-b", "--binary", dest="binaryLocation",
                   help="absolute binary file path", metavar="C:\\Program Files\\OpenVPN\\bin\\openvpn-gui.exe", default="C:\\Program Files\\OpenVPN\\bin\\openvpn-gui.exe")
 parser.add_option("-c", "--config", dest="configFile",
                   help="config file name without file extension", metavar="moon", default="Hollaender_real")
-#parser.add_option("-d", "--debug",
-#                  action="store_false", dest="verbose", default=False,
-#                  help="don't print status messages to stdout")
+parser.add_option("-d", "--debug", dest="debugOutput",
+                  help="print status messages to stdout", default=False)
 
 
 #region set variables according to given params
 (options, args) = parser.parse_args()
 
-targetHost = options.targetHost
+pingTargetHost = options.targetHost
 ovpnBinaryPath = options.binaryLocation
 ovpnConfigFile = options.configFile + ".ovpn"
+showDebugOutput = options.debugOutput
 #endregion
 
 
@@ -68,16 +71,16 @@ ovpnConfigFile = options.configFile + ".ovpn"
 print("+---- startup check -------+")
 print("|".ljust(27) + "|")
 if(isWindowsOS()):
-    print("| Win OS detected".ljust(27) + "|")
+    print("| win OS detected".ljust(27) + "|")
 if(doesFileExist(ovpnBinaryPath)):
-    print("| Binary found - good".ljust(27) + "|")
+    print("| binary found - good".ljust(27) + "|")
 print("|".ljust(27) + "|")
 print("+---- startup check -------+")
 #endregion
 
 
 while(shouldRun): # <- bad practice
-    pingResponse = doSmartPing(targetHost)
+    pingResponse = doSmartPing(pingTargetHost)
 
     if (pingResponse != True):
         pingHasFailed(True)
@@ -87,6 +90,7 @@ while(shouldRun): # <- bad practice
     # reset on x amount of failed attempts
     if (failedPingCount >= maxPingAttempts):
         pingHasFailed()
+        print("+--------------------------+")
         print("| failed "+ str(maxPingAttempts) + " pings in a row")
         #region attempt to reconnect
         # on a windows OS?
@@ -94,11 +98,13 @@ while(shouldRun): # <- bad practice
             cmd = 'start /b cmd /c \"' + ovpnBinaryPath + '\" --connect ' + ovpnConfigFile
             # run and remember the process as 'x'
             x = subprocess.Popen(cmd, shell=True)
+            ovpnPID = x.pid
+            print("| new ovpn process id: " + str(ovpnPID))
             #subprocess.call(["C:\\Program Files\\OpenVPN\\bin\\openvpn-gui.exe", "--connect testerino"])
             #callReturnValue = subprocess.call(ovpnBinaryPath + " --command connect " + ovpnConfigPath)
         else:
             #TODO: linux && mac process startup
-            print("not implemented yet, boi. :(")            
+            print("| not implemented yet, boi. :(")            
         #endregion
 
 
