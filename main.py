@@ -47,14 +47,14 @@ def pingHasFailed(isFail = False):
 
 #region main code entry
 parser = OptionParser()
-parser.add_option("-t", "--target", dest="targetHost",
-                  help="host adress to ping", metavar="10.0.0.1", default="10.0.0.1")
-parser.add_option("-b", "--binary", dest="binaryLocation",
-                  help="absolute binary file path", metavar="C:\\Program Files\\OpenVPN\\bin\\openvpn-gui.exe", default="C:\\Program Files\\OpenVPN\\bin\\openvpn-gui.exe")
-parser.add_option("-c", "--config", dest="configFile",
-                  help="config file name without file extension", metavar="moon", default="Hollaender_real")
-parser.add_option("-d", "--debug", dest="debugOutput",
-                  help="print status messages to stdout", default=False)
+parser.add_option("-t", "--target", dest="targetHost", metavar="10.0.0.1", default="10.0.0.1",
+                  help="host adress to ping")
+parser.add_option("-b", "--binary", dest="binaryLocation", metavar="C:\\Program Files\\OpenVPN\\bin\\openvpn-gui.exe", default="C:\\Program Files\\OpenVPN\\bin\\openvpn-gui.exe",
+                  help="absolute binary file path")
+parser.add_option("-c", "--config", dest="configFile", metavar="moon", default="Hollaender_real",
+                  help="config file name without file extension")
+parser.add_option("-d", "--debug", dest="debugOutput", metavar=True, default=False,
+                  help="print status messages to console")
 
 
 #region set variables according to given params
@@ -100,8 +100,6 @@ while(shouldRun): # <- bad practice
             x = subprocess.Popen(cmd, shell=True)
             ovpnPID = x.pid
             print("| new ovpn process id: " + str(ovpnPID))
-            #subprocess.call(["C:\\Program Files\\OpenVPN\\bin\\openvpn-gui.exe", "--connect testerino"])
-            #callReturnValue = subprocess.call(ovpnBinaryPath + " --command connect " + ovpnConfigPath)
         else:
             #TODO: linux && mac process startup
             print("| not implemented yet, boi. :(")            

@@ -27,7 +27,6 @@ python Path\To\File\main.py -t 13.37.0.1 -c SecureMoonVPN
 
 
 ## ToDo (maybe):
-* debug argument implementation for more intel chatter output in terminal/console
 * support for linux and/or mac OS
 * more performant check if we (re)connected succesfully without ghetto sleep usage
 * check for running OVPN instances and kill "our" old disconnected instances
