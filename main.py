@@ -35,6 +35,12 @@ def doSmartPing(host):
 
     return subprocess.call(command, stdout=open(platform.os.devnull, 'wb')) == 0
 
+def doSubProcessStartup(parameterString):
+    cmd = parameterString
+    x = subprocess.Popen(cmd, shell=True)
+
+    return x.pid
+
 def pingHasFailed(isFail = False):
     global failedPingCount
 
@@ -47,7 +53,7 @@ def pingHasFailed(isFail = False):
 
 #region main code entry
 parser = OptionParser()
-parser.add_option("-t", "--target", dest="targetHost", metavar="10.0.0.1", default="10.0.0.1",
+parser.add_option("-t", "--target", dest="targetHost", metavar="13.37.0.1", default="10.0.0.1",
                   help="host adress to ping")
 parser.add_option("-b", "--binary", dest="binaryLocation", metavar="C:\\Program Files\\OpenVPN\\bin\\openvpn-gui.exe", default="C:\\Program Files\\OpenVPN\\bin\\openvpn-gui.exe",
                   help="absolute binary file path")
@@ -68,14 +74,22 @@ showDebugOutput = options.debugOutput
 
 
 #region lets do some basic checks before doing anything fancy..
-print("+---- startup check -------+")
-print("|".ljust(27) + "|")
+print("+-------- startup check ----------+")
+print("|".ljust(34) + "|")
 if(isWindowsOS()):
-    print("| win OS detected".ljust(27) + "|")
+    print("| win OS detected".ljust(34) + "|")
+else:
+    print("| unix OS detected".ljust(34) + "|")
 if(doesFileExist(ovpnBinaryPath)):
-    print("| binary found - good".ljust(27) + "|")
-print("|".ljust(27) + "|")
-print("+---- startup check -------+")
+    print("| binary found - good".ljust(34) + "|")
+else:
+    print("| binary not found".ljust(34) + "|")
+if(doesFileExist(ovpnConfigFile) and not isWindowsOS()):
+    print("| config found - good".ljust(34) + "|")
+elif not isWindowsOS():
+    print("| config not found".ljust(34) + "|")
+print("|".ljust(34) + "|")
+print("+-------- startup check ----------+")
 #endregion
 
 
@@ -93,16 +107,19 @@ while(shouldRun): # <- bad practice
         print("+--------------------------+")
         print("| failed "+ str(maxPingAttempts) + " pings in a row")
         #region attempt to reconnect
-        # on a windows OS?
+        # windows OS process startup
         if(isWindowsOS()):            
             cmd = 'start /b cmd /c \"' + ovpnBinaryPath + '\" --connect ' + ovpnConfigFile
-            # run and remember the process as 'x'
-            x = subprocess.Popen(cmd, shell=True)
-            ovpnPID = x.pid
-            print("| new ovpn process id: " + str(ovpnPID))
-        else:
-            #TODO: linux && mac process startup
-            print("| not implemented yet, boi. :(")            
+
+        # linux && mac process startup
+        else:            
+            #TODO: include into readme -> https://serverfault.com/questions/647231/getting-cannot-ioctl-tunsetiff-tun-operation-not-permitted-when-trying-to-con
+            #                        |--> sudo chmod u+s $(which openvpn)
+            # Linux mint: python3 main.py -b /usr/sbin/openvpn -c /home/drb/Testerino
+            cmd = ovpnBinaryPath + " " + ovpnConfigFile
+        
+        ovpnPID = doSubProcessStartup(cmd)
+        print("| new ovpn process id: " + str(ovpnPID))
         #endregion
 
 
