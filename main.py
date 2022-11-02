@@ -74,22 +74,22 @@ showDebugOutput = options.debugOutput
 
 
 #region lets do some basic checks before doing anything fancy..
-print("+-------- startup check ----------+")
-print("|".ljust(34) + "|")
+print("+----- startup check -----+")
+print("|")
 if(isWindowsOS()):
-    print("| win OS detected".ljust(34) + "|")
+    print("| win OS detected")
 else:
-    print("| unix OS detected".ljust(34) + "|")
+    print("| unix OS detected")
 if(doesFileExist(ovpnBinaryPath)):
-    print("| binary found - good".ljust(34) + "|")
+    print("| binary found - good")
 else:
-    print("| binary not found".ljust(34) + "|")
+    print("| binary not found")
 if(doesFileExist(ovpnConfigFile) and not isWindowsOS()):
-    print("| config found - good".ljust(34) + "|")
+    print("| config found - good")
 elif not isWindowsOS():
-    print("| config not found".ljust(34) + "|")
-print("|".ljust(34) + "|")
-print("+-------- startup check ----------+")
+    print("| config not found")
+print("|")
+print("+----- startup check -----+")
 #endregion
 
 
@@ -104,7 +104,6 @@ while(shouldRun): # <- bad practice
     # reset on x amount of failed attempts
     if (failedPingCount >= maxPingAttempts):
         pingHasFailed()
-        print("+--------------------------+")
         print("| failed "+ str(maxPingAttempts) + " pings in a row")
         #region attempt to reconnect
         # windows OS process startup

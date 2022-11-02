@@ -8,33 +8,36 @@ Please keep in mind: This code was chunked together by a noob python dev in an t
 
 ![console help output screenshot](https://github.com/0x1911/ovpn_watchdog/blob/main/_img/help_output.png)
 
+
 ## Requirements:
 * Win OS (only tested on Win OS so far! It'll break when trying to startup the ovpn-gui client on linux/mac <- 27.10.2022)
 * OpenVPN-Gui client
 * OpenVPN config file in ../config/ with added credentials || keys
 
 
-## Installation:
-* Clone it
-* Use it
-
-
-## How To:
-```
-python main.py -h
-```
-## Alternative How To:
+## Windows OS How To:
 * Create a *.bat file
 * pseudo batch code example:
 ```
-python Path\To\File\main.py -t 13.37.0.1 -c SecureMoonVPN
+python Path\To\File\main.py -c SecureMoonVPN -t 13.37.0.1
 ```
 * add to Win OS autostart through your method of choice
 * hopefully never end up with a disconnected client over a longer period of time
 
+## Linux OS How To:
+* make sure your user has the rights to execute the openvpn binary file either via sudo or chmod usage
+  for reference check: https://serverfault.com/questions/647231/getting-cannot-ioctl-tunsetiff-tun-operation-not-permitted-when-trying-to-con
+ --> sudo chmod u+s $(path/to/openvpnBinary)
+```
+python3 main.py -b /usr/sbin/openvpn -c /home/0x1911/Testerino -t 13.37.0.1
+```
 
-## ToDo (maybe):
-* support for linux and/or mac OS
+
+### Tested on:
+- Windows 10
+- Linux Mint
+
+
+### ToDo:
 * more performant check if we (re)connected succesfully without ghetto sleep usage
 * check for running OVPN instances and kill "our" old disconnected instances
-* code cleanup
