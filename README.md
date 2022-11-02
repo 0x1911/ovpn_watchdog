@@ -10,12 +10,13 @@ Please keep in mind: This code was chunked together by a noob python dev in an t
 
 
 ## Requirements:
-* Win OS (only tested on Win OS so far! It'll break when trying to startup the ovpn-gui client on linux/mac <- 27.10.2022)
 * OpenVPN-Gui client
-* OpenVPN config file in ../config/ with added credentials || keys
+* Python 2.x or 3.x
+* Check How to's for your target system
 
 
 ## Windows OS How To:
+* OpenVPN config file in ../config/ with added credentials || keys
 * Create a *.bat file
 * pseudo batch code example:
 ```
