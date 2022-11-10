@@ -24,6 +24,11 @@ def doesFileExist(filePath):
 def doesPathExist(absolutePath):
     return pathlib.path.exists(absolutePath)
 
+def timedPrint(messageString):
+    curr_time = time.strftime("%H:%M:%S", time.localtime())
+
+    return print(curr_time + " :: " + messageString)
+
 def doSmartPing(host):
     #build the ping param string depending on operating system
     # -n for windows || nt os, -c on mac and unix
@@ -31,6 +36,7 @@ def doSmartPing(host):
     command = ['ping', param, '1', host]
 
     if(showDebugOutput):
+        timedPrint("ping")
         return subprocess.call(command) == 0
 
     return subprocess.call(command, stdout=open(platform.os.devnull, 'wb')) == 0
@@ -74,22 +80,22 @@ showDebugOutput = options.debugOutput
 
 
 #region lets do some basic checks before doing anything fancy..
-print("+----- startup check -----+")
-print("|")
+timedPrint("+----- startup check -----+")
+timedPrint("|")
 if(isWindowsOS()):
-    print("| win OS detected")
+    timedPrint("| win OS detected")
 else:
-    print("| unix OS detected")
+    timedPrint("| unix OS detected")
 if(doesFileExist(ovpnBinaryPath)):
-    print("| binary found - good")
+    timedPrint("| binary found - good")
 else:
-    print("| binary not found")
+    timedPrint("| binary not found")
 if(doesFileExist(ovpnConfigFile) and not isWindowsOS()):
-    print("| config found - good")
+    timedPrint("| config found - good")
 elif not isWindowsOS():
-    print("| config not found")
-print("|")
-print("+----- startup check -----+")
+    timedPrint("| config not found")
+timedPrint("|")
+timedPrint("+----- startup check -----+")
 #endregion
 
 
@@ -104,7 +110,7 @@ while(shouldRun): # <- bad practice
     # reset on x amount of failed attempts
     if (failedPingCount >= maxPingAttempts):
         pingHasFailed()
-        print("| failed "+ str(maxPingAttempts) + " pings in a row")
+        timedPrint("| failed "+ str(maxPingAttempts) + " pings in a row")
         #region attempt to reconnect
         # windows OS process startup
         if(isWindowsOS()):            
@@ -118,13 +124,13 @@ while(shouldRun): # <- bad practice
             cmd = ovpnBinaryPath + " " + ovpnConfigFile
         
         ovpnPID = doSubProcessStartup(cmd)
-        print("| new ovpn process id: " + str(ovpnPID))
+        timedPrint("| new ovpn process id: " + str(ovpnPID))
         #endregion
 
 
         # ghetto sleep - waiting for connection to be established
         time.sleep(15) 
-        print("| connected successfully?")        
+        timedPrint("| connected successfully?")        
         # TODO: check for running process?
         # TODO: maybe kill all running ovpn processes?
 
